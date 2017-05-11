@@ -1,0 +1,8 @@
+﻿<tbody>
+    <h1>Nick's page</h1>
+</tbody>
+
+<input #text placeholder="Song Name" />
+<button class="btn" type="button" (click)="strip(text.value)">Search</button>
+
+<input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".mp3">
