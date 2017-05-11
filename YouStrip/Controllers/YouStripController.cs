@@ -41,22 +41,26 @@ namespace YouStrip.Controllers
         {
             var uploads = Path.Combine(_environment.WebRootPath, "Songs");
             var request = this.HttpContext.Request;
-            var body = request.Body;
-
-            string documentContents;
-            using (Stream receiveStream = body)
+            var newSong = request.Form.Files[0];
+            using (var fileStream = new FileStream(Path.Combine(uploads, newSong.FileName), FileMode.Create))
             {
-                using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
-                {
-                    documentContents = readStream.ReadToEnd();
-                }
+                await newSong.CopyToAsync(fileStream);
             }
 
-            using (var fileStream = new FileStream(Path.Combine(uploads, "test"), FileMode.Create))
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult GetFileNames()
+        {
+            DirectoryInfo dir = new DirectoryInfo("wwwroot/Songs");
+            FileInfo[] files = dir.GetFiles();
+            List<string> names = new List<string>();
+            foreach(FileInfo f in files)
             {
-                await body.CopyToAsync(fileStream);
+                names.Add(f.Name);
             }
-            return Ok();
+            return Json(names);
         }
     }
 }

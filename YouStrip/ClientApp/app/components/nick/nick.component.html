@@ -6,3 +6,11 @@
 <button class="btn" type="button" (click)="strip(text.value)">Search</button>
 
 <input type="file" (change)="fileChange($event)" placeholder="Upload file" accept=".mp3">
+
+<button (click)="getNames()">Get Song Names</button>
+<ul *ngIf="names">
+    <li *ngFor = "let songName of names">
+        {{songName}}
+    </li>
+</ul>
+<button (click)="playSong()">Test Song</button>

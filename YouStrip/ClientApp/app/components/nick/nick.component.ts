@@ -1,7 +1,7 @@
 ﻿import { Component } from '@angular/core';
-import { Http, RequestOptions, Headers } from '@angular/http';
-
-
+import { Http, RequestOptions, Headers, Response } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 @Component({
     selector: 'nick',
@@ -10,6 +10,7 @@ import { Http, RequestOptions, Headers } from '@angular/http';
 })
 
 export class NickTestComponent {
+    names: Array<string> = [];
 
     constructor(private http: Http) { }
 
@@ -22,6 +23,7 @@ export class NickTestComponent {
     }
 
     redirect(link) {
+        console.log(link);
         window.location.href = link
     }
 
@@ -37,9 +39,35 @@ export class NickTestComponent {
             let options = new RequestOptions({ headers: headers });
             this.http.post('/api/YouStrip/Upload/', formData, options)
                 .subscribe(response => {
-                    console.log(response);
+                    //for (var i = 0; i < response['_body'].
                 });
         }
     }
+
+    getNames() {
+        this.http.get('/api/YouStrip/GetFileNames')
+            .subscribe(response => {
+                this.names = response.json();
+            });
+    }
+
+    playSong() {
+        var audio = new Audio();
+        audio.src = "Songs/Gorillaz - Feel Good Inc. (Official Video) (4).mp3";
+        audio.load();
+        audio.play();
+        console.log(audio);
+    }
+
+    //getNames(): Observable<string[]> {
+    //    console.log('in the click');
+    //    return (this.http.get('/api/YouStrip/GetFileNames').map(this.extractData));
+    //}
+
+    //private extractData(res: Response) {
+    //    let body = res.json();
+    //    return body.data || {};
+    //}
+
 
 }
